@@ -37,17 +37,20 @@ jobs:
         run: |
           cp vacc_data.csv foph-covid19-data
       - name: Commit files
+        env:
+          GITHUB_TOKEN: ${{ secrets.WRITE_TOKEN }}
         run: |
           cd foph-covid19-data
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git commit -m "Update data" -a
-      - name: Push changes
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.WRITE_TOKEN }}
-          branch: main
-          repository: doerfli/foph-covid19-data
-          directory: foph-covid19-data
+          git push
+      # - name: Push changes
+      #   uses: ad-m/github-push-action@master
+      #   with:
+      #     github_token: ${{ secrets.WRITE_TOKEN }}
+      #     branch: main
+      #     repository: doerfli/foph-covid19-data
+      #     directory: foph-covid19-data
       
       
