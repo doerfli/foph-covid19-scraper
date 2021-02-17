@@ -45,4 +45,5 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           directory: foph-covid19-data
+          repository: doerfli/foph-covid19-data
       
