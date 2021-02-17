@@ -50,7 +50,7 @@ jobs:
           source-directory: 'foph-covid19-data'
           destination-github-username: 'doerfli'
           destination-repository-name: 'foph-covid19-data'
-          user-email: github-action-bot@github.com
+          user-email: github@doerf.li
           target-branch: main
       
       
