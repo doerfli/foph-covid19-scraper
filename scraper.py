@@ -52,6 +52,7 @@ for name in fophdatazip.namelist():
 with open('vacc_data.csv', 'w', newline='') as csvfile:
     csvwriter = csv.writer(csvfile, delimiter=',',
                             quotechar='"', quoting=csv.QUOTE_MINIMAL)
+    csvwriter.writerow(["date", "canton", "deliveredTotal", "deliveredPer100", "administeredTotal", "administeredPer100", "fullyVaccinatedTotal", "fullyVaccinatedPer100"])
     for date in sorted(vacc_data):
         print("writing data for %s" % date)
         for canton in sorted(vacc_data[date]):
