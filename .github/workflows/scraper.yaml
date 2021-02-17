@@ -30,6 +30,7 @@ jobs:
         uses: actions/checkout@v2.3.4
         with:
           persist-credentials: false
+          fetch-depth: 0
           repository: 'doerfli/foph-covid19-data'
           path: 'foph-covid19-data'
       - name: Copy data to data repo
@@ -43,8 +44,6 @@ jobs:
           git commit -m "Update data" -a
       - name: Push changes
         uses: ad-m/github-push-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.WRITE_TOKEN }}
         with:
           github_token: ${{ secrets.WRITE_TOKEN }}
           branch: main
