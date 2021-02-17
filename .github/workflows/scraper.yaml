@@ -30,7 +30,7 @@ jobs:
           # destination_folder: 'test-dir'
           user_email: 'github@doerf.li'
           user_name: 'doerfli'
-          commit_message: 'data update from scraper'
+          # commit_message: 'data update from scraper'
           
       # - name: Archive data
       #   uses: actions/upload-artifact@v2
