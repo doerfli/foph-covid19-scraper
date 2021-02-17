@@ -43,6 +43,8 @@ jobs:
           git commit -m "Update data" -a
       - name: Push changes
         uses: ad-m/github-push-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.WRITE_TOKEN }}
         with:
           github_token: ${{ secrets.WRITE_TOKEN }}
           branch: main
