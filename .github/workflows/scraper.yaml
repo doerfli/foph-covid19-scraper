@@ -9,6 +9,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2.3.4
         with:
+          persist-credentials: false
           path: 'scraper'
       - name: Set up Python 3.x
         uses: actions/setup-python@v2
@@ -28,6 +29,7 @@ jobs:
       - name: Checkout fohp-covid19-data
         uses: actions/checkout@v2.3.4
         with:
+          persist-credentials: false
           repository: 'doerfli/foph-covid19-data'
           path: 'foph-covid19-data'
       - name: Copy data to data repo
