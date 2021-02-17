@@ -23,3 +23,19 @@ jobs:
           path: |
             vacc_data.csv
       
+      - name: Checkout fohp-covid19-data
+        uses: actions/checkout@v2.3.4
+        repository: 'doerfli/fohp-covid19-data'
+        path: 'fohp-covid19-data'
+      - name: Copy data to data repo
+        run: |
+          cp vacc_data.csv fohp-covid19-data
+      - name: Commit files
+        run: |
+          git commit -m "Update data" -a
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          directory: fohp-covid19-data
+      
