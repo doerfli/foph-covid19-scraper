@@ -42,15 +42,11 @@ jobs:
           git config --local user.name "github-actions[bot]"
           git commit -m "Update data" -a
           git pull --rebase
-      - name: Pushes to another repository
-        uses: cpina/github-action-push-to-another-repository@master
-        env:
-          API_TOKEN_GITHUB: ${{ secrets.WRITE_TOKEN }}
+      - name: Push changes
+        uses: ad-m/github-push-action@master
         with:
-          source-directory: 'foph-covid19-data'
-          destination-github-username: 'doerfli'
-          destination-repository-name: 'foph-covid19-data'
-          user-email: github@doerf.li
-          target-branch: main
+          github_token: ${{ secrets.WRITE_TOKEN }}
+          branch: main
+          repository: doerfli/foph-covid19-data
       
       
