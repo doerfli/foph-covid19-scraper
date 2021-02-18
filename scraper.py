@@ -58,10 +58,10 @@ with open('vacc_data.csv', 'w', newline='') as csvfile:
         for canton in sorted(vacc_data[date]):
             data = vacc_data[date][canton]
             # print(data)
-            dt = data["deliveredTotal"]
-            dp = data["deliveredPer100"]
-            at = data["administeredTotal"]
-            ap = data["administeredPer100"]
+            dt = data["deliveredTotal"] if ("deliveredTotal" in data) else ""
+            dp = data["deliveredPer100"] if ("deliveredPer100" in data) else ""
+            at = data["administeredTotal"] if ("administeredTotal" in data) else ""
+            ap = data["administeredPer100"] if ("administeredPer100" in data) else ""
             ft = data["fullyVaccTotal"] if ("fullyVaccTotal" in data) else ""
             fp = data["fullyVaccPer100"] if ("fullyVaccPer100" in data) else ""
             csvwriter.writerow([date, canton, dt, dp, at, ap, ft, fp])
