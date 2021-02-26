@@ -62,8 +62,8 @@ def parsePersons(fophdatazip, name, vacc_data):
         date = row[0]
         canton = row[1]
         total = row[4]
-        per100 = row[6]
-        dtype = row[7]
+        per100 = row[7]
+        dtype = row[9]
         if date not in vacc_data:
             vacc_data[date] = {}
         if canton not in vacc_data[date]:
@@ -86,12 +86,12 @@ def writeCsv(vacc_data):
             for canton in sorted(vacc_data[date]):
                 data = vacc_data[date][canton]
                 # print(data)
-                dt = data["deliveredTotal"] if ("deliveredTotal" in data) else ""
-                dp = data["deliveredPer100"] if ("deliveredPer100" in data) else ""
-                at = data["administeredTotal"] if ("administeredTotal" in data) else ""
-                ap = data["administeredPer100"] if ("administeredPer100" in data) else ""
-                ft = data["fullyVaccTotal"] if ("fullyVaccTotal" in data) else ""
-                fp = data["fullyVaccPer100"] if ("fullyVaccPer100" in data) else ""
+                dt = data["deliveredTotal"] if ("deliveredTotal" in data) else "0"
+                dp = data["deliveredPer100"] if ("deliveredPer100" in data) else "0"
+                at = data["administeredTotal"] if ("administeredTotal" in data) else "0"
+                ap = data["administeredPer100"] if ("administeredPer100" in data) else "0"
+                ft = data["fullyVaccTotal"] if ("fullyVaccTotal" in data) else "0"
+                fp = data["fullyVaccPer100"] if ("fullyVaccPer100" in data) else "0"
                 csvwriter.writerow([date, canton, dt, dp, at, ap, ft, fp])
 
 
