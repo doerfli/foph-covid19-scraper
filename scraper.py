@@ -37,14 +37,19 @@ def processZipStreamAndExtractData(data_url):
 
 def parseDelivered(fophdatazip, name, vacc_data):
     csvreader = csv.reader(TextIOWrapper(fophdatazip.open(name), 'utf-8'), delimiter=',', quotechar='"')
+    idxGeoRegion = 0
+    idxDate = 0
+    idxSumTotal = 0
+    idxPer100PersonsTotal = 0
     for row in csvreader:
         if row[0] == "geoRegion":
+            idxGeoRegion, idxDate, idxSumTotal, idxPer100PersonsTotal = extractIdx(row, 'geoRegion', 'date', 'sumTotal', 'per100PersonsTotal')
             continue
         # print(', '.join(row))
-        canton = row[0]
-        date = row[1]
-        total = row[3]
-        per100 = row[4]
+        canton = row[idxGeoRegion]
+        date = row[idxDate]
+        total = row[idxSumTotal]
+        per100 = row[idxPer100PersonsTotal]
         if date not in vacc_data:
             vacc_data[date] = {}
         if canton not in vacc_data[date]:
@@ -53,17 +58,31 @@ def parseDelivered(fophdatazip, name, vacc_data):
         vacc_data[date][canton]["deliveredPer100"] = per100
     return vacc_data
 
+def extractIdx(row, *idxNames):
+    idxs = []
+    for idx in idxNames:
+        for i in range(len(row)):
+            if row[i] == idx:
+                idxs.append(i)
+    return idxs
+
 def parsePersons(fophdatazip, name, vacc_data):
+    idxGeoRegion = 0
+    idxDate = 0
+    idxSumTotal = 0
+    idxPer100PersonsTotal = 0
+    idxType = 0
     csvreader = csv.reader(TextIOWrapper(fophdatazip.open(name), 'utf-8'), delimiter=',', quotechar='"')
     for row in csvreader:
         if row[0] == "date": # skip header line
+            idxGeoRegion, idxDate, idxSumTotal, idxPer100PersonsTotal, idxType = extractIdx(row, 'geoRegion', 'date', 'sumTotal', 'per100PersonsTotal', 'type')
             continue
         # print(', '.join(row))
-        date = row[0]
-        canton = row[1]
-        total = row[4]
-        per100 = row[7]
-        dtype = row[9]
+        date = row[idxDate]
+        canton = row[idxGeoRegion]
+        total = row[idxSumTotal]
+        per100 = row[idxPer100PersonsTotal]
+        dtype = row[idxType]
         if date not in vacc_data:
             vacc_data[date] = {}
         if canton not in vacc_data[date]:
