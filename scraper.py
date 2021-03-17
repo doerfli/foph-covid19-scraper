@@ -3,10 +3,12 @@ import re
 import zipfile
 import os.path
 from scraper_vacc import processVaccData
+from scraper_cases import processCases
 
 def main():
     download_data()
     processVaccData()
+    processCases()
 
 def download_data():
     if os.path.exists("./dataset.zip"):

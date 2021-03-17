@@ -44,9 +44,9 @@ def write_cases_csv(data):
                                     quotechar='"', quoting=csv.QUOTE_MINIMAL)
             csvwriter.writerow(["date","time","abbreviation_canton_and_fl","ncumul_tested","ncumul_conf","new_hosp","current_hosp","current_icu","current_vent","ncumul_released","ncumul_deceased","source","current_isolated","current_quarantined","current_quarantined_riskareatravel","current_quarantined_total","ncumul_ICF"])
             for date in sorted(cdata):
-                print("writing data for %s" % date)
+                print("writing cases data for %s" % date)
                 datasetDay = data[canton][date]
-                print(datasetDay)
+                # print(datasetDay)
                 csvwriter.writerow([
                     date,
                     "", #time

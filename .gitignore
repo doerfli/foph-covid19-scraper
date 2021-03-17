@@ -1,6 +1,7 @@
 vacc_data.csv
 dataset.zip
 dataset/
+cases_*.csv
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

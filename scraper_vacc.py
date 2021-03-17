@@ -1,5 +1,6 @@
 import csv
 import os
+from helper import extractIdx
 
 def processVaccData():
     vacc_data = extractVaccData()
@@ -42,14 +43,6 @@ def parseDelivered(file, vacc_data):
         vacc_data[date][canton]["deliveredPer100"] = per100
     return vacc_data
 
-def extractIdx(row, *idxNames):
-    idxs = []
-    for idx in idxNames:
-        for i in range(len(row)):
-            if row[i] == idx:
-                idxs.append(i)
-    return idxs
-
 def parsePersons(file, vacc_data):
     idxGeoRegion = 0
     idxDate = 0
@@ -85,7 +78,7 @@ def writeVaccCsv(vacc_data):
                                 quotechar='"', quoting=csv.QUOTE_MINIMAL)
         csvwriter.writerow(["date", "canton", "deliveredTotal", "deliveredPer100", "administeredTotal", "administeredPer100", "fullyVaccinatedTotal", "fullyVaccinatedPer100"])
         for date in sorted(vacc_data):
-            print("writing data for %s" % date)
+            print("writing vacc data for %s" % date)
             for canton in sorted(vacc_data[date]):
                 data = vacc_data[date][canton]
                 # print(data)

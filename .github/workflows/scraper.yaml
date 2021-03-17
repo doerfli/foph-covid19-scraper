@@ -34,5 +34,16 @@ jobs:
           user_email: 'github@doerf.li'
           user_name: 'doerfli'
           destination_branch: main
+      
+      - name: Push scraped cases data to doerfli/foph-covid19-data
+        uses: dmnemec/copy_file_to_another_repo_action@v1.0.4
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.WRITE_TOKEN }}
+        with:
+          source_file: 'cases_*.csv'
+          destination_repo: 'doerfli/foph-covid19-data'
+          user_email: 'github@doerf.li'
+          user_name: 'doerfli'
+          destination_branch: main
           
       
