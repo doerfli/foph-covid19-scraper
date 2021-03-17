@@ -40,7 +40,7 @@ jobs:
         env:
           API_TOKEN_GITHUB: ${{ secrets.WRITE_TOKEN }}
         with:
-          source_file: 'cases_*.csv'
+          source_file: 'cases/'
           destination_repo: 'doerfli/foph-covid19-data'
           user_email: 'github@doerf.li'
           user_name: 'doerfli'
