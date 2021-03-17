@@ -1,17 +1,27 @@
 from urllib.request import urlopen
 import re
 import zipfile
-from io import BytesIO
+import io
 import csv
+import os, os.path
 from io import TextIOWrapper
 
-
 def main():
+    download_data()
+    processVaccData()
+
+def download_data():
+    if os.path.exists("./dataset.zip"):
+        print("dataset.zip already exists. using existing file")
+        return
     data_url = getDataUrl()
     print("data_url: %s" % data_url)
-    vacc_data = processZipStreamAndExtractData(data_url)
-    print(vacc_data)
-    writeCsv(vacc_data)
+    
+    with urlopen(data_url) as dl_file:
+        with open("./dataset.zip", 'wb') as out_file:
+            out_file.write(dl_file.read())
+    z = zipfile.ZipFile("./dataset.zip")
+    z.extractall("./dataset/")
 
 def getDataUrl():
     prefix = "https://www.covid19.admin.ch"
@@ -22,21 +32,26 @@ def getDataUrl():
     # print(match.group(1))
     return "%s%s" % (prefix, match.group(1))
 
-def processZipStreamAndExtractData(data_url):
+def processVaccData():
+    vacc_data = extractVaccData()
+    # print(vacc_data)
+    writeVaccCsv(vacc_data)
+
+def extractVaccData():
     vacc_data = {}
-    filebytes = BytesIO(urlopen(data_url).read())
-    fophdatazip = zipfile.ZipFile(filebytes)
-    for name in fophdatazip.namelist():
-        if (name == "data/COVID19VaccDosesDelivered.csv"):
+    base_dir = "./dataset/data"
+    for name in os.listdir(base_dir):
+        # print (name)
+        if (name == "COVID19VaccDosesDelivered.csv"):
             print(name)
-            vacc_data = parseDelivered(fophdatazip, name, vacc_data)
-        elif (name in ["data/COVID19FullyVaccPersons.csv", "data/COVID19VaccDosesAdministered.csv"]):
+            vacc_data = parseDelivered("%s/%s" % (base_dir, name), vacc_data)
+        elif (name in ["COVID19FullyVaccPersons.csv", "COVID19VaccDosesAdministered.csv"]):
             print(name)
-            vacc_data = parsePersons(fophdatazip, name, vacc_data)
+            vacc_data = parsePersons("%s/%s" % (base_dir, name), vacc_data)
     return vacc_data
 
-def parseDelivered(fophdatazip, name, vacc_data):
-    csvreader = csv.reader(TextIOWrapper(fophdatazip.open(name), 'utf-8'), delimiter=',', quotechar='"')
+def parseDelivered(file, vacc_data):
+    csvreader = csv.reader(open(file, "r"), delimiter=',', quotechar='"')
     idxGeoRegion = 0
     idxDate = 0
     idxSumTotal = 0
@@ -66,13 +81,13 @@ def extractIdx(row, *idxNames):
                 idxs.append(i)
     return idxs
 
-def parsePersons(fophdatazip, name, vacc_data):
+def parsePersons(file, vacc_data):
     idxGeoRegion = 0
     idxDate = 0
     idxSumTotal = 0
     idxPer100PersonsTotal = 0
     idxType = 0
-    csvreader = csv.reader(TextIOWrapper(fophdatazip.open(name), 'utf-8'), delimiter=',', quotechar='"')
+    csvreader = csv.reader(open(file, "r"), delimiter=',', quotechar='"')
     for row in csvreader:
         if row[0] == "date": # skip header line
             idxGeoRegion, idxDate, idxSumTotal, idxPer100PersonsTotal, idxType = extractIdx(row, 'geoRegion', 'date', 'sumTotal', 'per100PersonsTotal', 'type')
@@ -95,7 +110,7 @@ def parsePersons(fophdatazip, name, vacc_data):
             vacc_data[date][canton]["fullyVaccPer100"] = per100
     return vacc_data
 
-def writeCsv(vacc_data):
+def writeVaccCsv(vacc_data):
     with open('vacc_data.csv', 'w', newline='') as csvfile:
         csvwriter = csv.writer(csvfile, delimiter=',',
                                 quotechar='"', quoting=csv.QUOTE_MINIMAL)
