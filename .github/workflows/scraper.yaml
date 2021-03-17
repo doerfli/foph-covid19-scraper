@@ -36,7 +36,7 @@ jobs:
           destination_branch: main
       
       - name: Push scraped cases data to doerfli/foph-covid19-data
-        uses: dmnemec/copy_file_to_another_repo_action@v1.0.4
+        uses: dmnemec/copy_file_to_another_repo_action@v1.1.0
         env:
           API_TOKEN_GITHUB: ${{ secrets.WRITE_TOKEN }}
         with:
