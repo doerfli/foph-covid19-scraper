@@ -4,9 +4,11 @@ import zipfile
 import os.path
 from scraper_vacc import processVaccData
 from scraper_cases import processCases
+from scraper_pop import process_pop_data
 
 def main():
     download_data()
+    process_pop_data()
     processVaccData()
     processCases()
 
