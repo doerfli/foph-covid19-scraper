@@ -47,6 +47,9 @@ def parseDelivered(file, vacc_data):
         if type == "COVID19VaccDosesDelivered":
             vacc_data[date][canton]["deliveredTotal"] = total
             vacc_data[date][canton]["deliveredPer100"] = per100
+        elif type == "COVID19VaccDosesReceived":
+            vacc_data[date][canton]["receivedTotal"] = total
+            vacc_data[date][canton]["receivedPer100"] = per100
     return vacc_data
 
 def parseAdministered(file, vacc_data):
@@ -105,7 +108,7 @@ def writeVaccCsv(vacc_data):
     with open('vacc_data.csv', 'w', newline='') as csvfile:
         csvwriter = csv.writer(csvfile, delimiter=',',
                                 quotechar='"', quoting=csv.QUOTE_MINIMAL)
-        csvwriter.writerow(["date", "canton", "deliveredTotal", "deliveredPer100", "administeredTotal", "administeredPer100", "fullyVaccinatedTotal", "fullyVaccinatedPer100"])
+        csvwriter.writerow(["date", "canton", "deliveredTotal", "deliveredPer100", "administeredTotal", "administeredPer100", "fullyVaccinatedTotal", "fullyVaccinatedPer100", "receivedTotal", "receivedPer100"])
         for date in sorted(vacc_data):
             print("writing vacc data for %s" % date)
             for canton in sorted(vacc_data[date]):
@@ -117,4 +120,6 @@ def writeVaccCsv(vacc_data):
                 ap = data["administeredPer100"] if ("administeredPer100" in data) else "0"
                 ft = data["fullyVaccTotal"] if ("fullyVaccTotal" in data) else "0"
                 fp = data["fullyVaccPer100"] if ("fullyVaccPer100" in data) else "0"
-                csvwriter.writerow([date, canton, dt, dp, at, ap, ft, fp])
+                rt = data["receivedTotal"] if ("receivedTotal" in data) else "0"
+                rp = data["receivedPer100"] if ("receivedPer100" in data) else "0"
+                csvwriter.writerow([date, canton, dt, dp, at, ap, ft, fp, rt, rp])
