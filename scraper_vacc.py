@@ -29,21 +29,24 @@ def parseDelivered(file, vacc_data):
     idxDate = 0
     idxSumTotal = 0
     idxPer100PersonsTotal = 0
+    idxType = 0
     for row in csvreader:
         if row[0] == "geoRegion":
-            idxGeoRegion, idxDate, idxSumTotal, idxPer100PersonsTotal = extractIdx(row, 'geoRegion', 'date', 'sumTotal', 'per100PersonsTotal')
+            idxGeoRegion, idxDate, idxSumTotal, idxPer100PersonsTotal, idxType = extractIdx(row, 'geoRegion', 'date', 'sumTotal', 'per100PersonsTotal', 'type')
             continue
         # print(', '.join(row))
         canton = row[idxGeoRegion]
         date = row[idxDate]
         total = row[idxSumTotal]
         per100 = row[idxPer100PersonsTotal]
+        type = row[idxType]
         if date not in vacc_data:
             vacc_data[date] = {}
         if canton not in vacc_data[date]:
             vacc_data[date][canton] = {}
-        vacc_data[date][canton]["deliveredTotal"] = total
-        vacc_data[date][canton]["deliveredPer100"] = per100
+        if type == "COVID19VaccDosesDelivered":
+            vacc_data[date][canton]["deliveredTotal"] = total
+            vacc_data[date][canton]["deliveredPer100"] = per100
     return vacc_data
 
 def parseAdministered(file, vacc_data):
