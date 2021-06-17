@@ -12,7 +12,7 @@ def extract_pop_data():
     base_dir = "./dataset/data"
     for name in os.listdir(base_dir):
         # print (name)
-        if (name in ["COVID19FullyVaccPersons.csv"]):
+        if (name in ["COVID19VaccPersons.csv"]):
             print(name)
             data = parsePersons("%s/%s" % (base_dir, name), data)
     return data
