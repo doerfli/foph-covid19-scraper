@@ -15,9 +15,12 @@ def extractVaccData():
         if (name == "COVID19VaccDosesDelivered.csv"):
             print(name)
             vacc_data = parseDelivered("%s/%s" % (base_dir, name), vacc_data)
-        elif (name in ["COVID19FullyVaccPersons.csv", "COVID19VaccDosesAdministered.csv"]):
+        elif (name in ["COVID19VaccDosesAdministered.csv"]):
             print(name)
-            vacc_data = parsePersons("%s/%s" % (base_dir, name), vacc_data)
+            vacc_data = parseAdministered("%s/%s" % (base_dir, name), vacc_data)
+        elif (name in ["COVID19VaccPersons.csv"]):
+            print(name)
+            vacc_data = parseVaccPersons("%s/%s" % (base_dir, name), vacc_data)
     return vacc_data
 
 def parseDelivered(file, vacc_data):
@@ -43,7 +46,7 @@ def parseDelivered(file, vacc_data):
         vacc_data[date][canton]["deliveredPer100"] = per100
     return vacc_data
 
-def parsePersons(file, vacc_data):
+def parseAdministered(file, vacc_data):
     idxGeoRegion = 0
     idxDate = 0
     idxSumTotal = 0
@@ -67,7 +70,30 @@ def parsePersons(file, vacc_data):
         if dtype == "COVID19VaccDosesAdministered":
             vacc_data[date][canton]["administeredTotal"] = total
             vacc_data[date][canton]["administeredPer100"] = per100
-        elif dtype == "COVID19FullyVaccPersons":
+    return vacc_data
+
+def parseVaccPersons(file, vacc_data):
+    idxGeoRegion = 0
+    idxDate = 0
+    idxSumTotal = 0
+    idxPer100PersonsTotal = 0
+    idxType = 0
+    csvreader = csv.reader(open(file, "r"), delimiter=',', quotechar='"')
+    for row in csvreader:
+        if row[0] == "date": # skip header line
+            idxGeoRegion, idxDate, idxSumTotal, idxPer100PersonsTotal, idxType = extractIdx(row, 'geoRegion', 'date', 'sumTotal', 'per100PersonsTotal', 'type')
+            continue
+        # print(', '.join(row))
+        date = row[idxDate]
+        canton = row[idxGeoRegion]
+        total = row[idxSumTotal]
+        per100 = row[idxPer100PersonsTotal]
+        dtype = row[idxType]
+        if date not in vacc_data:
+            vacc_data[date] = {}
+        if canton not in vacc_data[date]:
+            vacc_data[date][canton] = {}
+        if dtype == "COVID19FullyVaccPersons":
             vacc_data[date][canton]["fullyVaccTotal"] = total
             vacc_data[date][canton]["fullyVaccPer100"] = per100
     return vacc_data
