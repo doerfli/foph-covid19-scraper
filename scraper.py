@@ -1,4 +1,5 @@
 from urllib.request import urlopen
+import json
 import re
 import zipfile
 import os.path
@@ -26,13 +27,8 @@ def download_data():
     z.extractall("./dataset/")
 
 def getDataUrl():
-    prefix = "https://www.covid19.admin.ch"
-    overview_src = urlopen("%s/en/overview" % prefix).read().decode('utf-8')
-    prog = re.compile("href=\"(/api/data/(.+)/sources-csv.zip)\"")
-    match = prog.search(overview_src)
-    # print(match)
-    # print(match.group(1))
-    return "%s%s" % (prefix, match.group(1))
+    context_json = json.loads(urlopen("https://www.covid19.admin.ch/api/data/context").read())
+    return context_json['sources']['zip']['csv']
 
 
 if __name__ == "__main__":
