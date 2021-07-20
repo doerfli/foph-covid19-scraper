@@ -18,7 +18,7 @@ def extractVaccData():
         elif (name in ["COVID19VaccDosesAdministered.csv"]):
             print(name)
             vacc_data = parseAdministered("%s/%s" % (base_dir, name), vacc_data)
-        elif (name in ["COVID19VaccPersons.csv"]):
+        elif (name in ["COVID19VaccPersons_v2.csv"]):
             print(name)
             vacc_data = parseVaccPersons("%s/%s" % (base_dir, name), vacc_data)
     return vacc_data
