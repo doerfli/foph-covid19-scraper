@@ -35,8 +35,10 @@ def parseDelivered(file, vacc_data):
             idxGeoRegion, idxDate, idxSumTotal, idxPer100PersonsTotal, idxType = extractIdx(row, 'geoRegion', 'date', 'sumTotal', 'per100PersonsTotal', 'type')
             continue
         # print(', '.join(row))
-        canton = row[idxGeoRegion]
         date = row[idxDate]
+        canton = row[idxGeoRegion]
+        if canton in ["all", "neighboring_chfl", "unknown"]:
+            continue
         total = row[idxSumTotal]
         per100 = row[idxPer100PersonsTotal]
         type = row[idxType]
@@ -66,6 +68,8 @@ def parseAdministered(file, vacc_data):
         # print(', '.join(row))
         date = row[idxDate]
         canton = row[idxGeoRegion]
+        if canton in ["all", "neighboring_chfl", "unknown"]:
+            continue
         total = row[idxSumTotal]
         per100 = row[idxPer100PersonsTotal]
         dtype = row[idxType]
@@ -92,6 +96,8 @@ def parseVaccPersons(file, vacc_data):
         # print(', '.join(row))
         date = row[idxDate]
         canton = row[idxGeoRegion]
+        if canton in ["all", "neighboring_chfl", "unknown"]:
+            continue
         total = row[idxSumTotal]
         per100 = row[idxPer100PersonsTotal]
         dtype = row[idxType]
