@@ -87,7 +87,7 @@ def parseVaccPersons(file, vacc_data):
     csvreader = csv.reader(open(file, "r"), delimiter=',', quotechar='"')
     for row in csvreader:
         if row[0] == "date": # skip header line
-            idxGeoRegion, idxDate, idxSumTotal, idxPer100PersonsTotal, idxType = extractIdx(row, 'geoRegion', 'date', 'sumTotal', 'per100PersonsTotal', 'type')
+            idxGeoRegion, idxDate, idxSumTotal, idxPer100PersonsTotal, idxType, idxAgeGroup = extractIdx(row, 'geoRegion', 'date', 'sumTotal', 'per100PersonsTotal', 'type', 'age_group')
             continue
         # print(', '.join(row))
         date = row[idxDate]
@@ -95,6 +95,9 @@ def parseVaccPersons(file, vacc_data):
         total = row[idxSumTotal]
         per100 = row[idxPer100PersonsTotal]
         dtype = row[idxType]
+        ageGroup = row[idxAgeGroup]
+        if ageGroup != "total_population":
+          continue
         if date not in vacc_data:
             vacc_data[date] = {}
         if canton not in vacc_data[date]:
