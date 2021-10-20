@@ -12,7 +12,7 @@ def extract_pop_data():
     base_dir = "./dataset/data"
     for name in os.listdir(base_dir):
         # print (name)
-        if (name in ["COVID19VaccPersons.csv"]):
+        if (name in ["COVID19VaccPersons_v2.csv"]):
             print(name)
             data = parsePersons("%s/%s" % (base_dir, name), data)
     return data
@@ -20,12 +20,17 @@ def extract_pop_data():
 def parsePersons(file, data):
     idxGeoRegion = 0
     idxPop = 0
+    idxAgeGroup = 0
     csvreader = csv.reader(open(file, "r"), delimiter=',', quotechar='"')
     for row in csvreader:
         if row[0] == "date": # skip header line
-            idxGeoRegion, idxPop = extractIdx(row, 'geoRegion', 'pop')
+            idxGeoRegion, idxPop, idxAgeGroup = extractIdx(row, 'geoRegion', 'pop', 'age_group')
             continue
         # print(', '.join(row))
+        if (row[idxAgeGroup] != 'total_population'):
+            continue
+        if not row[idxPop].isnumeric():
+            continue
         canton = row[idxGeoRegion]
         pop = row[idxPop]
         data[canton] = pop
