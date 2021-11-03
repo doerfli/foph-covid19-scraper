@@ -1,4 +1,5 @@
 vacc_data*.csv
+vacc_data/
 dataset.zip
 dataset/
 cases/

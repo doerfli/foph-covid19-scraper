@@ -64,8 +64,10 @@ def getVaccData(vacc_data, date, canton, pop, dtype, total, per100):
     return vacc_data
 
 def writeVaccCsv(vacc_data_total, vacc_data_twelveplus):
-    writeVaccCsvFile(vacc_data_total, 'vacc_data2_total.csv')
-    writeVaccCsvFile(vacc_data_twelveplus, 'vacc_data2_twelveplus.csv')
+    if not os.path.exists("vacc_data"):
+        os.mkdir("vacc_data")
+    writeVaccCsvFile(vacc_data_total, 'vacc_data/vacc_data2_total.csv')
+    writeVaccCsvFile(vacc_data_twelveplus, 'vacc_data/vacc_data2_twelveplus.csv')
 
 def writeVaccCsvFile(vacc_data, filename):
     with open(filename, 'w', newline='') as csvfile:
