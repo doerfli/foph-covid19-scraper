@@ -29,7 +29,7 @@ jobs:
         env:
           API_TOKEN_GITHUB: ${{ secrets.WRITE_TOKEN }}
         with:
-          source_file: 'vacc_data.csv'
+          source_file: 'vacc_data*.csv'
           destination_repo: 'doerfli/foph-covid19-data'
           user_email: 'github@doerf.li'
           user_name: 'doerfli'
