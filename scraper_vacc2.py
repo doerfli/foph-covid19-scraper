@@ -61,6 +61,9 @@ def getVaccData(vacc_data, date, canton, pop, dtype, total, per100):
     elif dtype == "COVID19FullyVaccPersons":
         vacc_data[date][canton]["fullyVaccTotal"] = total
         vacc_data[date][canton]["fullyVaccPer100"] = per100
+    elif dtype == "COVID19FirstBoosterPersons":
+        vacc_data[date][canton]["firstBoosterVaccTotal"] = total
+        vacc_data[date][canton]["firstBoosterVaccPer100"] = per100
     return vacc_data
 
 def writeVaccCsv(vacc_data_total, vacc_data_twelveplus):
@@ -73,7 +76,7 @@ def writeVaccCsvFile(vacc_data, filename):
     with open(filename, 'w', newline='') as csvfile:
         csvwriter = csv.writer(csvfile, delimiter=',',
                                 quotechar='"', quoting=csv.QUOTE_MINIMAL)
-        csvwriter.writerow(["date", "canton", "pop", "atLeastOneDoseTotal", "atLeastOneDosePer100", "partiallyVaccTotal", "partiallyVaccPer100", "fullyVaccinatedTotal", "fullyVaccinatedPer100"])
+        csvwriter.writerow(["date", "canton", "pop", "atLeastOneDoseTotal", "atLeastOneDosePer100", "partiallyVaccTotal", "partiallyVaccPer100", "fullyVaccinatedTotal", "fullyVaccinatedPer100", "firstBoosterVaccinatedTotal", "firstBoosterVaccinatedPer100"])
         for date in sorted(vacc_data):
             print("writing vacc data for %s" % date)
             for canton in sorted(vacc_data[date]):
@@ -86,4 +89,6 @@ def writeVaccCsvFile(vacc_data, filename):
                 pp = data["partiallyVaccPer100"] if ("partiallyVaccPer100" in data) else "0"
                 ft = data["fullyVaccTotal"] if ("fullyVaccTotal" in data) else "0"
                 fp = data["fullyVaccPer100"] if ("fullyVaccPer100" in data) else "0"
-                csvwriter.writerow([date, canton, pop, lt, lp, pt, pp, ft, fp])
+                fbt = data["firstBoosterVaccTotal"] if ("firstBoosterVaccTotal" in data) else "0"
+                fbp = data["firstBoosterVaccPer100"] if ("firstBoosterVaccPer100" in data) else "0"
+                csvwriter.writerow([date, canton, pop, lt, lp, pt, pp, ft, fp, fbt, fbp])
