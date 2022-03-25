@@ -24,7 +24,7 @@ jobs:
         run: |
           python scraper/scraper.py
 
-      - name: Archive production artifacts
+      - name: Archive scraped data
         uses: actions/upload-artifact@v2
         with:
           name: scrape_data
@@ -34,48 +34,58 @@ jobs:
             vacc_data.csv
             pop.csv
 
-      # - name: Push scraped data to doerfli/foph-covid19-data
-      #   uses: dmnemec/copy_file_to_another_repo_action@v1.1.1
-      #   env:
-      #     API_TOKEN_GITHUB: ${{ secrets.WRITE_TOKEN }}
-      #   with:
-      #     source_file: 'vacc_data.csv'
-      #     destination_repo: 'doerfli/foph-covid19-data'
-      #     user_email: 'github@doerf.li'
-      #     user_name: 'doerfli'
-      #     destination_branch: main
+  upload:
+    needs: scrape
+    runs-on: ubuntu-latest
+    # if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Download built vue-app
+        uses: actions/download-artifact@v2
+        with:
+          name: scrape_data
+          path: ./
+      - name: Push scraped data to doerfli/foph-covid19-data
+        uses: dmnemec/copy_file_to_another_repo_action@v1.1.1
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.WRITE_TOKEN }}
+        with:
+          source_file: 'vacc_data.csv'
+          destination_repo: 'doerfli/foph-covid19-data'
+          user_email: 'github@doerf.li'
+          user_name: 'doerfli'
+          destination_branch: main
 
-      # - name: Push scraped data to doerfli/foph-covid19-data
-      #   uses: dmnemec/copy_file_to_another_repo_action@v1.1.1
-      #   env:
-      #     API_TOKEN_GITHUB: ${{ secrets.WRITE_TOKEN }}
-      #   with:
-      #     source_file: 'vacc_data/'
-      #     destination_repo: 'doerfli/foph-covid19-data'
-      #     user_email: 'github@doerf.li'
-      #     user_name: 'doerfli'
-      #     destination_branch: main
+      - name: Push scraped data to doerfli/foph-covid19-data
+        uses: dmnemec/copy_file_to_another_repo_action@v1.1.1
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.WRITE_TOKEN }}
+        with:
+          source_file: 'vacc_data/'
+          destination_repo: 'doerfli/foph-covid19-data'
+          user_email: 'github@doerf.li'
+          user_name: 'doerfli'
+          destination_branch: main
       
-      # - name: Push scraped data to doerfli/foph-covid19-data
-      #   uses: dmnemec/copy_file_to_another_repo_action@v1.1.0
-      #   env:
-      #     API_TOKEN_GITHUB: ${{ secrets.WRITE_TOKEN }}
-      #   with:
-      #     source_file: 'pop.csv'
-      #     destination_repo: 'doerfli/foph-covid19-data'
-      #     user_email: 'github@doerf.li'
-      #     user_name: 'doerfli'
-      #     destination_branch: main
+      - name: Push scraped data to doerfli/foph-covid19-data
+        uses: dmnemec/copy_file_to_another_repo_action@v1.1.0
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.WRITE_TOKEN }}
+        with:
+          source_file: 'pop.csv'
+          destination_repo: 'doerfli/foph-covid19-data'
+          user_email: 'github@doerf.li'
+          user_name: 'doerfli'
+          destination_branch: main
 
-      # - name: Push scraped cases data to doerfli/foph-covid19-data
-      #   uses: dmnemec/copy_file_to_another_repo_action@v1.1.1
-      #   env:
-      #     API_TOKEN_GITHUB: ${{ secrets.WRITE_TOKEN }}
-      #   with:
-      #     source_file: 'cases/'
-      #     destination_repo: 'doerfli/foph-covid19-data'
-      #     user_email: 'github@doerf.li'
-      #     user_name: 'doerfli'
-      #     destination_branch: main
+      - name: Push scraped cases data to doerfli/foph-covid19-data
+        uses: dmnemec/copy_file_to_another_repo_action@v1.1.1
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.WRITE_TOKEN }}
+        with:
+          source_file: 'cases/'
+          destination_repo: 'doerfli/foph-covid19-data'
+          user_email: 'github@doerf.li'
+          user_name: 'doerfli'
+          destination_branch: main
           
       
