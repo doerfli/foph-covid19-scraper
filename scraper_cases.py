@@ -39,16 +39,24 @@ def parse_cases(file, data):
 def write_cases_csv(data):
     if not os.path.exists("cases"):
         os.mkdir("cases")
+    totalcsvrows = []
+    for canton in data:
+        cdata = data[canton]
+        with open("cases/cases_%s.csv" % canton, 'w', newline='') as csvfile:
+            totalcsvrows = write_canton_csv(totalcsvrows, csvfile, canton, cdata)
+
     with open("cases/cases_total.csv", 'w', newline='') as totalcsvfile:
         totalcsvwriter = csv.writer(totalcsvfile, delimiter=',',
                             quotechar='"', quoting=csv.QUOTE_MINIMAL)
         totalcsvwriter.writerow(["date","time","abbreviation_canton_and_fl","ncumul_tested","ncumul_conf","new_hosp","current_hosp","current_icu","current_vent","ncumul_released","ncumul_deceased","source","current_isolated","current_quarantined","current_quarantined_riskareatravel","current_quarantined_total","ncumul_ICF"])
-        for canton in data:
-            cdata = data[canton]
-            with open("cases/cases_%s.csv" % canton, 'w', newline='') as csvfile:
-                write_canton_csv(totalcsvwriter, csvfile, canton, cdata)
+        totalcsvrows.sort(key=extract_date)
+        for row in totalcsvrows:
+            totalcsvwriter.writerow(row)
 
-def write_canton_csv(totalcsvwriter, csvfile, canton, cdata): 
+def extract_date(row):
+    return row[0]
+
+def write_canton_csv(totalcsvrows, csvfile, canton, cdata): 
     csvwriter = csv.writer(csvfile, delimiter=',',
                             quotechar='"', quoting=csv.QUOTE_MINIMAL)
     csvwriter.writerow(["date","time","abbreviation_canton_and_fl","ncumul_tested","ncumul_conf","new_hosp","current_hosp","current_icu","current_vent","ncumul_released","ncumul_deceased","source","current_isolated","current_quarantined","current_quarantined_riskareatravel","current_quarantined_total","ncumul_ICF"])
@@ -76,4 +84,5 @@ def write_canton_csv(totalcsvwriter, csvfile, canton, cdata):
             "", #"ncumul_ICF"]
         ]
         csvwriter.writerow(csvrow)
-        totalcsvwriter.writerow(csvrow)
+        totalcsvrows.append(csvrow)
+    return totalcsvrows
