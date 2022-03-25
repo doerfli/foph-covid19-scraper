@@ -16,6 +16,9 @@ def extract_case_data():
         if (name == "COVID19Cases_geoRegion.csv"):
             print(name)
             data = parse_cases("%s/%s" % (base_dir, name), data)
+        if (name == "COVID19Death_geoRegion.csv"):
+            print(name)
+            data = parse_death("%s/%s" % (base_dir, name), data)
     return data
 
 def extract_hosp_data(data):
@@ -42,8 +45,27 @@ def parse_cases(file, data):
         if canton not in data:
             data[canton] = {}
         if date not in data[canton]:
-            data[canton][date] = { "total": 0, "current_hosp": 0, "current_icu": 0 }
+            data[canton][date] = { "total": 0, "current_hosp": 0, "current_icu": 0, "death": 0 }
         data[canton][date]["total"] = total
+    return data
+
+def parse_death(file, data):
+    idxGeoRegion = 0
+    idxDatum = 0
+    idxSumTotal = 0
+    csvreader = csv.reader(open(file, "r"), delimiter=',', quotechar='"')
+    for row in csvreader:
+        if row[0] == "geoRegion":
+            idxGeoRegion, idxDatum, idxSumTotal = extractIdx(row, 'geoRegion', 'datum', 'sumTotal')
+            continue
+        canton = row[idxGeoRegion]
+        date = row[idxDatum]
+        total = row[idxSumTotal]
+        if canton not in data:
+            data[canton] = {}
+        if date not in data[canton]:
+            data[canton][date] = { "total": 0, "current_hosp": 0, "current_icu": 0, "death": 0 }
+        data[canton][date]["death"] = total
     return data
 
 def parse_hosp(file, data):
@@ -63,7 +85,7 @@ def parse_hosp(file, data):
         if canton not in data:
             data[canton] = {}
         if date not in data[canton]:
-            data[canton][date] = { "total": 0, "current_hosp": 0, "current_icu": 0 }
+            data[canton][date] = { "total": 0, "current_hosp": 0, "current_icu": 0, "death": 0 }
         data[canton][date]["current_hosp"] = currHosp
         data[canton][date]["current_icu"] = currIcu
     return data
@@ -107,7 +129,7 @@ def write_canton_csv(totalcsvrows, csvfile, canton, cdata):
             datasetDay["current_icu"], #"current_icu",
             "", #"current_vent",
             "", #"ncumul_released",
-            "", #"ncumul_deceased",
+            datasetDay["death"], #"ncumul_deceased",
             "https://www.covid19.admin.ch/en/overview", #source",
             "", #"current_isolated",
             "", #"current_quarantined",
