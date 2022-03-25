@@ -4,6 +4,7 @@ import os
 
 def processCases():
     data = extract_case_data()
+    data = extract_hosp_data(data)
     write_cases_csv(data)
 
 
@@ -15,6 +16,15 @@ def extract_case_data():
         if (name == "COVID19Cases_geoRegion.csv"):
             print(name)
             data = parse_cases("%s/%s" % (base_dir, name), data)
+    return data
+
+def extract_hosp_data(data):
+    base_dir = "./dataset/data"
+    for name in os.listdir(base_dir):
+        # print (name)
+        if (name == "COVID19HospCapacity_geoRegion.csv"):
+            print(name)
+            data = parse_hosp("%s/%s" % (base_dir, name), data)
     return data
 
 def parse_cases(file, data):
@@ -32,8 +42,30 @@ def parse_cases(file, data):
         if canton not in data:
             data[canton] = {}
         if date not in data[canton]:
-            data[canton][date] = {}
+            data[canton][date] = { "total": 0, "current_hosp": 0, "current_icu": 0 }
         data[canton][date]["total"] = total
+    return data
+
+def parse_hosp(file, data):
+    idxGeoRegion = 0
+    idxDate = 0
+    idxCurrIcu = 0
+    idxCurrHosp = 0
+    csvreader = csv.reader(open(file, "r"), delimiter=',', quotechar='"')
+    for row in csvreader:
+        if row[0] == "date":
+            idxGeoRegion, idxDate, idxCurrIcu, idxCurrHosp = extractIdx(row, 'geoRegion', 'date', 'ICU_Covid19Patients', 'Total_Covid19Patients')
+            continue
+        canton = row[idxGeoRegion]
+        date = row[idxDate]
+        currHosp = row[idxCurrHosp]
+        currIcu = row[idxCurrIcu]
+        if canton not in data:
+            data[canton] = {}
+        if date not in data[canton]:
+            data[canton][date] = { "total": 0, "current_hosp": 0, "current_icu": 0 }
+        data[canton][date]["current_hosp"] = currHosp
+        data[canton][date]["current_icu"] = currIcu
     return data
 
 def write_cases_csv(data):
@@ -71,8 +103,8 @@ def write_canton_csv(totalcsvrows, csvfile, canton, cdata):
             "", #ncumul_tested"
             datasetDay["total"], #"ncumul_conf"
             "", #new_hosp",
-            "", #"current_hosp",
-            "", #"current_icu",
+            datasetDay["current_hosp"], #"current_hosp",
+            datasetDay["current_icu"], #"current_icu",
             "", #"current_vent",
             "", #"ncumul_released",
             "", #"ncumul_deceased",
