@@ -24,6 +24,26 @@ jobs:
         run: |
           python scraper/scraper.py
 
+      - name: Archive scraped data
+        uses: actions/upload-artifact@v2
+        with:
+          name: scrape_data
+          path: |
+            cases/
+            vacc_data/
+            vacc_data.csv
+            pop.csv
+
+  upload:
+    needs: scrape
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Download scraped data
+        uses: actions/download-artifact@v2
+        with:
+          name: scrape_data
+          path: ./
       - name: Push scraped data to doerfli/foph-covid19-data
         uses: dmnemec/copy_file_to_another_repo_action@v1.1.1
         env:
