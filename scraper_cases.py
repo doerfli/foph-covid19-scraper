@@ -39,32 +39,41 @@ def parse_cases(file, data):
 def write_cases_csv(data):
     if not os.path.exists("cases"):
         os.mkdir("cases")
-    for canton in data:
-        cdata = data[canton]
-        with open("cases/cases_%s.csv" % canton, 'w', newline='') as csvfile:
-            csvwriter = csv.writer(csvfile, delimiter=',',
-                                    quotechar='"', quoting=csv.QUOTE_MINIMAL)
-            csvwriter.writerow(["date","time","abbreviation_canton_and_fl","ncumul_tested","ncumul_conf","new_hosp","current_hosp","current_icu","current_vent","ncumul_released","ncumul_deceased","source","current_isolated","current_quarantined","current_quarantined_riskareatravel","current_quarantined_total","ncumul_ICF"])
-            for date in sorted(cdata):
-                print("writing cases data for %s" % date)
-                datasetDay = data[canton][date]
-                # print(datasetDay)
-                csvwriter.writerow([
-                    date,
-                    "", #time
-                    canton, #abbreviation_canton_and_fl
-                    "", #ncumul_tested"
-                    datasetDay["total"], #"ncumul_conf"
-                    "", #new_hosp",
-                    "", #"current_hosp",
-                    "", #"current_icu",
-                    "", #"current_vent",
-                    "", #"ncumul_released",
-                    "", #"ncumul_deceased",
-                    "https://www.covid19.admin.ch/en/overview", #source",
-                    "", #"current_isolated",
-                    "", #"current_quarantined",
-                    "", #"current_quarantined_riskareatravel",
-                    "", #"current_quarantined_total",
-                    "", #"ncumul_ICF"]
-                ])
+    with open("cases/cases_total.csv", 'w', newline='') as totalcsvfile:
+        totalcsvwriter = csv.writer(totalcsvfile, delimiter=',',
+                            quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        totalcsvwriter.writerow(["date","time","abbreviation_canton_and_fl","ncumul_tested","ncumul_conf","new_hosp","current_hosp","current_icu","current_vent","ncumul_released","ncumul_deceased","source","current_isolated","current_quarantined","current_quarantined_riskareatravel","current_quarantined_total","ncumul_ICF"])
+        for canton in data:
+            cdata = data[canton]
+            with open("cases/cases_%s.csv" % canton, 'w', newline='') as csvfile:
+                write_canton_csv(totalcsvwriter, csvfile, canton, cdata)
+
+def write_canton_csv(totalcsvwriter, csvfile, canton, cdata): 
+    csvwriter = csv.writer(csvfile, delimiter=',',
+                            quotechar='"', quoting=csv.QUOTE_MINIMAL)
+    csvwriter.writerow(["date","time","abbreviation_canton_and_fl","ncumul_tested","ncumul_conf","new_hosp","current_hosp","current_icu","current_vent","ncumul_released","ncumul_deceased","source","current_isolated","current_quarantined","current_quarantined_riskareatravel","current_quarantined_total","ncumul_ICF"])
+    for date in sorted(cdata):
+        print("writing cases data for %s" % date)
+        datasetDay = cdata[date]
+        # print(datasetDay)
+        csvrow = [
+            date,
+            "", #time
+            canton, #abbreviation_canton_and_fl
+            "", #ncumul_tested"
+            datasetDay["total"], #"ncumul_conf"
+            "", #new_hosp",
+            "", #"current_hosp",
+            "", #"current_icu",
+            "", #"current_vent",
+            "", #"ncumul_released",
+            "", #"ncumul_deceased",
+            "https://www.covid19.admin.ch/en/overview", #source",
+            "", #"current_isolated",
+            "", #"current_quarantined",
+            "", #"current_quarantined_riskareatravel",
+            "", #"current_quarantined_total",
+            "", #"ncumul_ICF"]
+        ]
+        csvwriter.writerow(csvrow)
+        totalcsvwriter.writerow(csvrow)
