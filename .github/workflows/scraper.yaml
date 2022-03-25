@@ -37,9 +37,9 @@ jobs:
   upload:
     needs: scrape
     runs-on: ubuntu-latest
-    # if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main'
     steps:
-      - name: Download built vue-app
+      - name: Download scraped data
         uses: actions/download-artifact@v2
         with:
           name: scrape_data
