@@ -1,4 +1,4 @@
-name: FOPH README.md updated?  
+name: FOPH README.md update check  
 
 on: 
   workflow_dispatch:
@@ -7,7 +7,7 @@ on:
     - cron:  '16 16 * * *'
 
 jobs:
-  scrape:
+  check:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
