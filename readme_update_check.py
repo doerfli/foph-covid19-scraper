@@ -4,13 +4,16 @@ import re
 import zipfile
 import os.path
 import hashlib
+import sys
 
 def main():
+    update_checksum = len(sys.argv) > 1 and sys.argv[1] == "--update"
     download_data()
-    verifyChecksumOfReadme()
+    checksum = verify_checksum_of_readme(update_checksum)
+    if update_checksum:
+        update_expected_checksum(checksum)
 
-
-def verifyChecksumOfReadme():
+def verify_checksum_of_readme(update_checksum):
     sha256_hash = hashlib.sha256()
     with open("./dataset/README.md","rb") as f:
         # Read and update hash string value in blocks of 4K
@@ -25,9 +28,15 @@ def verifyChecksumOfReadme():
     print("checksum of downloaded README.md: %s" % checksum)
     print("expected checksum of README.md: %s" % expected_checksum)
     
+    if (update_checksum):
+        return checksum
     if (checksum != expected_checksum):
         print("checksum of downloaded README.md does not match expected checksum")
         exit(1)
+
+def update_expected_checksum(checksum):
+    with open("./dataset.README.md.sha256","w") as f:
+        f.write(checksum)
     
 def download_data():
     if os.path.exists("./dataset.zip"):
