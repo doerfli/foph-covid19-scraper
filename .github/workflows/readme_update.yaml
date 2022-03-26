@@ -21,4 +21,5 @@ jobs:
           python-version: '3.x'
       - name: Run README.md checker
         run: |
-          python scraper/readme_update_check.py
+          cd scraper
+          python readme_update_check.py
