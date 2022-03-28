@@ -92,5 +92,16 @@ jobs:
           user_email: 'github@doerf.li'
           user_name: 'doerfli'
           destination_branch: main
+      
+      - name: Push dataset checksum to doerfli/foph-covid19-data
+        uses: dmnemec/copy_file_to_another_repo_action@v1.1.1
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.WRITE_TOKEN }}
+        with:
+          source_file: 'dataset.zip.sha256'
+          destination_repo: 'doerfli/foph-covid19-data'
+          user_email: 'github@doerf.li'
+          user_name: 'doerfli'
+          destination_branch: main
           
       
