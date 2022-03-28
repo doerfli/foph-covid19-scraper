@@ -4,6 +4,7 @@ dataset.zip
 dataset/
 cases/
 pop.csv
+dataset.zip.sha256
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
