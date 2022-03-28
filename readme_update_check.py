@@ -5,6 +5,7 @@ import zipfile
 import os.path
 import hashlib
 import sys
+from checksum import calculate_filehash
 
 def main():
     update_checksum = len(sys.argv) > 1 and sys.argv[1] == "--update"
@@ -14,12 +15,7 @@ def main():
         update_expected_checksum(checksum)
 
 def verify_checksum_of_readme(update_checksum):
-    sha256_hash = hashlib.sha256()
-    with open("./dataset/README.md","rb") as f:
-        # Read and update hash string value in blocks of 4K
-        for byte_block in iter(lambda: f.read(4096),b""):
-            sha256_hash.update(byte_block)
-    checksum = sha256_hash.hexdigest()
+    checksum = calculate_filehash("./dataset/README.md")
 
     expected_checksum = ""
     with open("./dataset.README.md.sha256","r") as f:

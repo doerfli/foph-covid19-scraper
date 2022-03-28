@@ -20,6 +20,11 @@ jobs:
         uses: actions/setup-python@v3
         with:
           python-version: '3.x'
+      - name: Grab dataset.zip.sha256
+        uses: wei/curl@v1.1.1
+        continue-on-error: true
+        with:
+          args: -o dataset.zip.sha256 https://raw.githubusercontent.com/doerfli/foph-covid19-data/main/dataset.zip.sha256
       - name: Run scraper
         run: |
           python scraper/scraper.py
@@ -83,6 +88,17 @@ jobs:
           API_TOKEN_GITHUB: ${{ secrets.WRITE_TOKEN }}
         with:
           source_file: 'cases/'
+          destination_repo: 'doerfli/foph-covid19-data'
+          user_email: 'github@doerf.li'
+          user_name: 'doerfli'
+          destination_branch: main
+      
+      - name: Push dataset checksum to doerfli/foph-covid19-data
+        uses: dmnemec/copy_file_to_another_repo_action@v1.1.1
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.WRITE_TOKEN }}
+        with:
+          source_file: 'dataset.zip.sha256'
           destination_repo: 'doerfli/foph-covid19-data'
           user_email: 'github@doerf.li'
           user_name: 'doerfli'
