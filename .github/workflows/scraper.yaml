@@ -41,6 +41,7 @@ jobs:
             vacc_data.csv
             pop.csv
             dataset.zip.sha256
+            dataset.zip.latest.sha256
 
   upload:
     needs: scrape
