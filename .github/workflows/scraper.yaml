@@ -28,7 +28,6 @@ jobs:
       - name: Run scraper
         run: |
           python scraper/scraper.py
-
       - name: Archive scraped data
         uses: actions/upload-artifact@v2
         with:
@@ -50,8 +49,15 @@ jobs:
         with:
           name: scrape_data
           path: ./
+      - name: Check file vacc_data.csv exists
+        id: check_files
+        uses: andstor/file-existence-action@v1
+        with:
+          files: "vacc_data.csv"
+
       - name: Push scraped data to doerfli/foph-covid19-data
         uses: dmnemec/copy_file_to_another_repo_action@v1.1.1
+        if: steps.check_files.outputs.files_exists == 'true'
         env:
           API_TOKEN_GITHUB: ${{ secrets.WRITE_TOKEN }}
         with:
@@ -63,6 +69,7 @@ jobs:
 
       - name: Push scraped data to doerfli/foph-covid19-data
         uses: dmnemec/copy_file_to_another_repo_action@v1.1.1
+        if: steps.check_files.outputs.files_exists == 'true'
         env:
           API_TOKEN_GITHUB: ${{ secrets.WRITE_TOKEN }}
         with:
@@ -74,6 +81,7 @@ jobs:
       
       - name: Push scraped data to doerfli/foph-covid19-data
         uses: dmnemec/copy_file_to_another_repo_action@v1.1.0
+        if: steps.check_files.outputs.files_exists == 'true'
         env:
           API_TOKEN_GITHUB: ${{ secrets.WRITE_TOKEN }}
         with:
@@ -96,6 +104,7 @@ jobs:
       
       - name: Push dataset checksum to doerfli/foph-covid19-data
         uses: dmnemec/copy_file_to_another_repo_action@v1.1.1
+        if: steps.check_files.outputs.files_exists == 'true'
         env:
           API_TOKEN_GITHUB: ${{ secrets.WRITE_TOKEN }}
         with:
