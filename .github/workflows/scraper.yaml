@@ -22,7 +22,7 @@ jobs:
           python-version: '3.x'
 
       - name: Grab dataset.zip.sha256
-        uses: enflo/curl-action@v1.2
+        uses: wei/curl@v1
         continue-on-error: true
         with:
           curl: -o dataset.zip.latest.sha256 https://raw.githubusercontent.com/doerfli/foph-covid19-data/main/dataset.zip.sha256
