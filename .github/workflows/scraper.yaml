@@ -22,10 +22,10 @@ jobs:
           python-version: '3.x'
 
       - name: Grab dataset.zip.sha256
-        uses: wei/curl@v1.1.1
+        uses: enflo/curl-action@v1.2
         continue-on-error: true
         with:
-          args: -o dataset.zip.sha256 https://raw.githubusercontent.com/doerfli/foph-covid19-data/main/dataset.zip.sha256
+          curl: -o dataset.zip.sha256 https://raw.githubusercontent.com/doerfli/foph-covid19-data/main/dataset.zip.sha256
       - name: Make dataset.zip.sha256 writable
         run: |
           chmod a+w dataset.zip.sha256
@@ -33,7 +33,7 @@ jobs:
       - name: Run scraper
         run: |
           python scraper/scraper.py
-          
+
       - name: Archive scraped data
         uses: actions/upload-artifact@v2
         with:
