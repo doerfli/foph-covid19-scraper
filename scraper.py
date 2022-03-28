@@ -36,11 +36,11 @@ def download_data():
 def check_if_dataset_has_been_processed_before():
     checksum = calculate_filehash("./dataset.zip")
     
-    if not os.path.exists("./dataset.zip.sha256"):
+    if not os.path.exists("./dataset.zip.latest.sha256"):
         return checksum
 
     checksum_of_last_run = ""
-    with open("./dataset.zip.sha256","r") as f:
+    with open("./dataset.zip.latest.sha256","r") as f:
         checksum_of_last_run = f.read()
 
     if checksum == checksum_of_last_run:

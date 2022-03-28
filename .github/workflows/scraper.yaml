@@ -25,10 +25,7 @@ jobs:
         uses: enflo/curl-action@v1.2
         continue-on-error: true
         with:
-          curl: -o dataset.zip.sha256 https://raw.githubusercontent.com/doerfli/foph-covid19-data/main/dataset.zip.sha256
-      - name: Make dataset.zip.sha256 writable
-        run: |
-          chmod a+w dataset.zip.sha256
+          curl: -o dataset.zip.latest.sha256 https://raw.githubusercontent.com/doerfli/foph-covid19-data/main/dataset.zip.sha256
 
       - name: Run scraper
         run: |
@@ -55,11 +52,11 @@ jobs:
         with:
           name: scrape_data
           path: ./
-      - name: Check file vacc_data.csv exists
+      - name: Check file dataset.zip.sha256 exists
         id: check_files
         uses: andstor/file-existence-action@v1
         with:
-          files: "vacc_data.csv"
+          files: "dataset.zip.sha256"
 
       - name: Push scraped data to doerfli/foph-covid19-data
         uses: dmnemec/copy_file_to_another_repo_action@v1.1.1
