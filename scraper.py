@@ -8,6 +8,7 @@ from scraper_vacc import processVaccData
 from scraper_vacc2 import processVaccData2
 from scraper_cases import processCases
 from scraper_pop import process_pop_data
+from scraper_timestamps import process_timestamps
 from pathlib import Path
 from checksum import calculate_filehash
 
@@ -18,6 +19,7 @@ def main():
     processVaccData()
     processVaccData2()
     processCases()
+    process_timestamps()
     update_dataset_checksum(dataset_checksum)
 
 def download_data():
