@@ -16,7 +16,7 @@ jobs:
           persist-credentials: false
           path: 'scraper'
       - name: Set up Python 3.x
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v4
         with:
           python-version: '3.x'
       - name: Run README.md checker
