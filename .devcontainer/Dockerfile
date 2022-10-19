@@ -20,3 +20,5 @@ FROM mcr.microsoft.com/vscode/devcontainers/python:3.10-bullseye
 
 RUN curl -fsSL https://starship.rs/install.sh | sh -s -- --yes 
 RUN echo "eval \"\$(starship init bash)\"" >> /home/vscode/.bashrc && echo "eval \"\$(starship init zsh)\"" >> /home/vscode/.zshrc
+
+WORKDIR /workspace
