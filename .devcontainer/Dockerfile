@@ -2,7 +2,7 @@
 
 # [Choice] Ruby version: 3, 3.0, 2, 2.7, 2.6
 ARG VARIANT="3-bullseye"
-FROM mcr.microsoft.com/vscode/devcontainers/python:3.10-bullseye
+FROM mcr.microsoft.com/vscode/devcontainers/python:3.11-bullseye
 
 #ARG INSTALL_ZSH="true"
 
